@@ -1,0 +1,84 @@
+<Window x:Class="Notex.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Notex" Height="720" Width="1080" MinHeight="600" MinWidth="900">
+    <DockPanel>
+        <Border Background="#1f1f1f" DockPanel.Dock="Top" Padding="10" BorderBrush="#333" BorderThickness="0 0 0 1">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Spacing="8">
+                    <TextBlock Text="Notex" FontSize="18" Foreground="White" FontWeight="Bold"/>
+                    <TextBlock Text="|" Foreground="#777" Margin="5,0"/>
+                    <TextBlock Text="Airtable" Foreground="#ccc"/>
+                    <TextBlock Text="Status:" Foreground="#ccc" Margin="10,0,4,0"/>
+                    <TextBlock Text="{Binding ConnectionStatus}" Foreground="{Binding ConnectionStatusColor}"/>
+                </StackPanel>
+                <Button Content="Settings" HorizontalAlignment="Right" Padding="12,6" Command="{Binding OpenSettingsCommand}" />
+            </DockPanel>
+        </Border>
+
+        <Grid Background="#111">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Books list -->
+            <Border Grid.Column="0" BorderBrush="#333" BorderThickness="0 0 1 0" Background="#181818" Padding="10">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="6">
+                        <Button Content="New Book" Command="{Binding CreateBookCommand}" Padding="8,4"/>
+                        <Button Content="Rename" Command="{Binding RenameBookCommand}" Padding="8,4"/>
+                        <Button Content="Delete" Command="{Binding DeleteBookCommand}" Padding="8,4"/>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding Books}" SelectedItem="{Binding SelectedBook}" Margin="0,10,0,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="White"/>
+                                    <TextBlock Text="{Binding UpdatedAt, StringFormat='Updated {0:g}'}" Foreground="#999" FontSize="12"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Notes list -->
+            <Border Grid.Column="1" BorderBrush="#333" BorderThickness="1 0 1 0" Background="#141414" Padding="10">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="6">
+                        <Button Content="New Note" Command="{Binding CreateNoteCommand}" Padding="8,4"/>
+                        <Button Content="Delete" Command="{Binding DeleteNoteCommand}" Padding="8,4"/>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}" Margin="0,10,0,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="{Binding Content}" TextTrimming="CharacterEllipsis" Foreground="#aaa" MaxLines="2"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Note editor -->
+            <Border Grid.Column="2" BorderBrush="#333" BorderThickness="1 0 0 0" Background="#0f0f0f" Padding="10">
+                <DockPanel>
+                    <StackPanel>
+                        <TextBox Text="{Binding SelectedNote.Title, UpdateSourceTrigger=PropertyChanged}" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+                        <TextBox Text="{Binding SelectedNote.Content, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" Height="400"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="Save" Command="{Binding SaveNoteCommand}" Padding="12,6" />
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
